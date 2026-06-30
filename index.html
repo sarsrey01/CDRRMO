@@ -3,342 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCTV Portal - Tagbilaran City CDRRMO</title>
+    <title>CCTV Request Portal - Tagbilaran City CDRRMO</title>
     <style>
         :root {
             --primary: #1e293b;
             --primary-light: #334155;
             --accent: #0f766e;
-            --accent-light: #14b8a6;
-            --card-bg: rgba(255, 255, 255, 0.96);
+            --card-bg: rgba(255, 255, 255, 0.94); /* Added slight transparency to the card */
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --success: #16a34a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
         body { 
             color: var(--text-main); 
-            padding: 20px; 
+            padding: 40px 20px; 
             -webkit-font-smoothing: antialiased;
-            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('sars1.jpg') no-repeat center center fixed;
+            
+            /* Background Image configuration with clean modern overlay transparency */
+            background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)), url('sars1.jpg');
             background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
         }
         
-        /* Dashboard Wrapper */
-        .dashboard-container {
-            max-width: 900px;
-            margin: 30px auto;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
+        /* Glassmorphism drop-shadow update for minimal, neat aesthetics */
+        .container { 
+            max-width: 640px; 
+            margin: 0 auto; 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(8px); /* Gives a soft glass tint when background scrolls */
         }
-
-        /* Navigation Bar */
-        .nav-tabs {
-            display: flex;
-            background: var(--primary);
-            border-bottom: 1px solid var(--primary-light);
-            padding: 0 10px;
-        }
-        .nav-tab {
-            color: #94a3b8;
-            padding: 16px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border-bottom: 3px solid transparent;
-        }
-        .nav-tab:hover { color: #fff; }
-        .nav-tab.active {
-            color: #fff;
-            border-bottom-color: var(--accent-light);
-        }
-
-        /* View Content Viewpanes */
-        .view-panel { display: none; padding: 40px; }
-        .view-panel.active { display: block; }
         
         .header { margin-bottom: 32px; }
-        .header h1 { font-size: 24px; font-weight: 600; color: var(--primary); letter-spacing: -0.5px; margin-bottom: 6px; }
+        .header h1 { font-size: 22px; font-weight: 600; color: var(--primary); letter-spacing: -0.5px; margin-bottom: 6px; }
         .header p { color: var(--text-muted); font-size: 14px; }
 
-        .notice-box { background-color: #f8fafc; border: 1px solid var(--border); padding: 16px; border-radius: 8px; margin-bottom: 32px; font-size: 13.5px; color: var(--primary-light); line-height: 1.5; }
+        .notice-box { background-color: #fafafa; border: 1px solid var(--border); padding: 16px; border-radius: 6px; margin-bottom: 32px; font-size: 13.5px; color: var(--primary-light); line-height: 1.5; }
+        .notice-box strong { color: var(--text-main); font-weight: 600; }
+
         .section-title { font-size: 13px; font-weight: 600; color: var(--accent); margin: 28px 0 16px 0; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        /* Forms & Fields */
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 13.5px; color: var(--primary-light); }
         label span { color: #ef4444; }
         
-        input, select, textarea {
-            width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14.5px; color: var(--text-main); background-color: #fff; transition: all 0.2s ease;
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="time"], select, textarea {
+            width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14.5px; color: var(--text-main); background-color: #fff; transition: all 0.2s ease;
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--text-muted); }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+        @media (max-width: 500px) { .grid-2 { grid-template-columns: 1fr; } }
 
-        button { background-color: var(--accent); color: #fff; border: none; padding: 12px 20px; font-size: 14.5px; font-weight: 500; border-radius: 6px; width: 100%; cursor: pointer; transition: background 0.2s ease; }
-        button:hover { background-color: var(--primary); }
-        button:disabled { background-color: var(--text-muted); cursor: not-allowed; }
+        button { background-color: var(--primary); color: #fff; border: none; padding: 12px 20px; font-size: 14.5px; font-weight: 500; border-radius: 6px; width: 100%; cursor: pointer; transition: background 0.2s ease; margin-top: 12px; }
+        button:hover { background-color: var(--primary-light); }
 
-        /* Real-Time Availability Slots */
-        .slot-checker { background: #f0fdfa; border: 1px solid #ccfbf1; padding: 20px; border-radius: 8px; margin-bottom: 24px; }
-        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-top: 12px; }
-        .slot-pill { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; text-align: center; background: white; font-weight: 500; color: var(--text-main); }
-        .slot-pill.available { border-color: #bbf7d0; color: var(--success); background: #f0fdf4; }
-        .slot-pill.booked { border-color: #fee2e2; color: #ef4444; background: #fef2f2; text-decoration: line-through; }
-
-        /* Tables for Admin Dashboard */
-        .admin-table-container { overflow-x: auto; margin-top: 20px; }
-        .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
-        .admin-table th, .admin-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
-        .admin-table th { background: #f8fafc; font-weight: 600; color: var(--primary); }
-        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-        .status-badge.pending { background: #fef3c7; color: #d97706; }
-        .status-badge.done { background: #dcfce7; color: #15803d; }
-        .action-btn { background: var(--primary); color: white; padding: 6px 12px; font-size: 12px; border-radius: 4px; width: auto; }
-
-        /* Success screen receipt */
-        .success-card { display: none; }
-        .receipt-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        /* Minimalist Success Card */
+        .success-card { display: none; text-align: left; }
+        .success-header { border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
+        .success-header h2 { color: var(--accent); font-size: 20px; font-weight: 600; }
+        .success-header p { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+        
+        .receipt-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
         .receipt-table td { padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        .receipt-table td.label { color: var(--text-muted); width: 40%; }
+        .receipt-table td.label { color: var(--text-muted); width: 40%; font-weight: 400; }
         .receipt-table td.value { color: var(--text-main); font-weight: 500; text-align: right; }
-        .receipt-table tr.highlight td.value { font-family: monospace; font-size: 16px; color: var(--accent); }
+        .receipt-table tr.highlight td { border-bottom: 2px solid var(--border); padding-bottom: 16px; }
+        .receipt-table tr.highlight td.value { font-family: monospace; font-size: 16px; color: var(--text-main); letter-spacing: 0.5px; }
+
+        .btn-secondary { background-color: transparent; border: 1px solid var(--border); color: var(--primary-light); max-width: 140px; margin-top: 0; }
+        .btn-secondary:hover { background-color: #f8fafc; color: var(--text-main); }
     </style>
 </head>
 <body>
 
-<div class="dashboard-container">
-    <div class="nav-tabs">
-        <div class="nav-tab active" onclick="switchTab('home-view')">Home / Request Form</div>
-        <div class="nav-tab" onclick="switchTab('slots-view'); fetchGlobalAvailability();">Check System Availability</div>
-        <div class="nav-tab" onclick="switchTab('admin-view'); fetchAdminData();">Admin Portal</div>
-    </div>
-
-    <div id="home-view" class="view-panel active">
-        <form id="appointmentForm">
-            <div class="header">
-                <h1>Tagbilaran City CDRRMO</h1>
-                <p>CCTV Review Request & Appointment Portal</p>
-            </div>
-
-            <div class="notice-box">
-                <strong>Notice:</strong> Please select your preferred appointment slot carefully. Real-time availability can be verified through the second tab menu.
-            </div>
-
-            <div class="section-title">1. Personal & Incident Information</div>
-            <div class="form-group">
-                <label for="fullName">Full Name <span>*</span></label>
-                <input type="text" id="fullName" required placeholder="John Doe">
-            </div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="phone">Mobile Number <span>*</span></label>
-                    <input type="tel" id="phone" required placeholder="0917XXXXXXX">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="name@example.com">
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="incidentDate">Date of Incident <span>*</span></label>
-                    <input type="date" id="incidentDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="incidentTime">Approximate Time <span>*</span></label>
-                    <input type="time" id="incidentTime" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="location">Exact Location / Intersection <span>*</span></label>
-                <input type="text" id="location" required placeholder="e.g., CPG Avenue corner Lesage Street">
-            </div>
-            <div class="form-group">
-                <label for="purpose">Brief Description / Purpose <span>*</span></label>
-                <textarea id="purpose" rows="2" required placeholder="Context of incident..."></textarea>
-            </div>
-
-            <div class="section-title">2. Appointment Scheduling</div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="visitDate">Preferred Date <span>*</span></label>
-                    <input type="date" id="visitDate" required onchange="checkSelectedDateSlots()">
-                </div>
-                <div class="form-group">
-                    <label for="visitTime">Available Time Slot <span>*</span></label>
-                    <select id="visitTime" required>
-                        <option value="">Select an office time slot</option>
-                        <option value="08:00 AM - 09:00 AM">08:00 AM - 09:00 AM</option>
-                        <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
-                        <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
-                        <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
-                        <option value="01:00 PM - 02:00 PM">01:00 PM - 02:00 PM</option>
-                        <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
-                        <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
-                        <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
-                    </select>
-                </div>
-            </div>
-            <div id="bookingSlotAlert" style="font-size: 13px; margin-bottom: 15px; font-weight: 500;"></div>
-
-            <button type="submit" id="submitBtn">Submit Secure Request</button>
-        </form>
-
-        <div id="successScreen" class="success-card">
-            <div class="header" style="border-bottom: 1px solid var(--border); padding-bottom: 16px;">
-                <h2 style="color: var(--accent);">Appointment Confirmed</h2>
-                <p>Your digital confirmation tracking ticket has been successfully logged.</p>
-            </div>
-            <table class="receipt-table">
-                <tr class="highlight"><td class="label">Reference Code</td><td class="value" id="lblCode">--</td></tr>
-                <tr><td class="label">Requester Name</td><td class="value" id="lblName">--</td></tr>
-                <tr><td class="label">Appointment Date</td><td class="value" id="lblDate">--</td></tr>
-                <tr><td class="label">Time Window</td><td class="value" id="lblTime">--</td></tr>
-                <tr><td class="label">Target Location</td><td class="value" id="lblLoc">--</td></tr>
-            </table>
-            <button onclick="window.print()" style="max-width: 160px; background: var(--primary);">Print Ticket</button>
-        </div>
-    </div>
-
-    <div id="slots-view" class="view-panel">
+<div class="container">
+    <!-- Form Interface -->
+    <form id="appointmentForm">
         <div class="header">
-            <h2>Live Availability Registry</h2>
-            <p>Select a business day below to view booked vs dynamic open tracking slots.</p>
+            <h1>Tagbilaran City CDRRMO</h1>
+            <p>CCTV Review Request & Appointment Portal</p>
         </div>
-        <div class="form-group" style="max-width: 300px;">
-            <label for="calendarCheckDate">Choose Check Target Date</label>
-            <input type="date" id="calendarCheckDate" onchange="fetchDaySlots(this.value)">
+
+        <div class="notice-box">
+            <strong>Required documents for your visit:</strong> N/A
         </div>
-        <div class="slot-checker">
-            <h4 id="slotStatusTitle">Status for selected date</h4>
-            <div class="slots-grid" id="slotsGridContainer">
-                <div style="color: var(--text-muted); font-size: 13px;">Please choose a valid work date above to load live registers.</div>
+
+        <div class="section-title">1. Personal Information</div>
+        <div class="form-group">
+            <label for="fullName">Full Name <span>*</span></label>
+            <input type="text" id="fullName" required placeholder="e.g., Full Name">
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="phone">Mobile Number <span>*</span></label>
+                <input type="tel" id="phone" required placeholder="0917XXXXXXX">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="name@example.com">
             </div>
         </div>
-    </div>
 
-    <div id="admin-view" class="view-panel">
-        <div class="header">
-            <h2>Internal Admin Processing Unit</h2>
-            <p>Review submitted requests and clear appointments out by switching statuses to <strong>DONE</strong>.</p>
+        <div class="section-title">2. Incident Description</div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="incidentDate">Date of Incident <span>*</span></label>
+                <input type="date" id="incidentDate" required>
+            </div>
+            <div class="form-group">
+                <label for="incidentTime">Approximate Time <span>*</span></label>
+                <input type="time" id="incidentTime" required>
+            </div>
         </div>
-        <div class="admin-table-container">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Ref Code</th>
-                        <th>Name</th>
-                        <th>Schedule</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="adminTableBody">
-                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading system registry entries...</td></tr>
-                </tbody>
-            </table>
+        <div class="form-group">
+            <label for="location">Exact Location / Intersection <span>*</span></label>
+            <input type="text" id="location" required placeholder="e.g., CPG Avenue corner Lesage Street">
         </div>
+        <div class="form-group">
+            <label for="purpose">Brief Description / Purpose <span>*</span></label>
+            <textarea id="purpose" rows="3" required placeholder="Provide concise context of the incident..."></textarea>
+        </div>
+
+        <div class="section-title">3. Schedule Appointment</div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="visitDate">Preferred Date <span>*</span></label>
+                <input type="date" id="visitDate" required>
+            </div>
+            <div class="form-group">
+                <label for="visitTime">Available Time Slot <span>*</span></label>
+                <select id="visitTime" required>
+                    <option value="">Select an office time slot</option>
+                    <option value="08:00 AM - 09:00 AM">08:00 AM - 09:00 AM</option>
+                    <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
+                    <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                    <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                    <option value="01:00 PM - 02:00 PM">01:00 PM - 02:00 PM</option>
+                    <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
+                    <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+                    <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit">Submit Request</button>
+    </form>
+
+    <!-- Minimalist Confirmation Interface -->
+    <div id="successScreen" class="success-card">
+        <div class="success-header">
+            <h2>Appointment Confirmed</h2>
+            <p>Your digital confirmation ticket has been generated.</p>
+        </div>
+        
+        <table class="receipt-table">
+            <tr class="highlight">
+                <td class="label">Reference Code</td>
+                <td class="value" id="lblCode">--</td>
+            </tr>
+            <tr>
+                <td class="label">Requester Name</td>
+                <td class="value" id="lblName">--</td>
+            </tr>
+            <tr>
+                <td class="label">Appointment Date</td>
+                <td class="value" id="lblDate">--</td>
+            </tr>
+            <tr>
+                <td class="label">Time Window</td>
+                <td class="value" id="lblTime">--</td>
+            </tr>
+            <tr>
+                <td class="label">Target Location</td>
+                <td class="value" id="lblLoc">--</td>
+            </tr>
+        </table>
+
+        <button onclick="window.print()" class="btn-secondary">Print Ticket</button>
     </div>
 </div>
 
 <script>
-    // Paste your Google App Script Executable Macro URL Endpoint Here
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwgK9gVrxnsnqlyoQIJ_FI_4lYIP12ibl-gK1AbiGugyBXjmZ6WDgk3eniPALFHI1Aa/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzrrCLj5DtcGSWy_EIK-zhY4blOnDDuV-VamH5z58oJkaHPFL61M9j2Gw-QfLVjoLQy/exec";
 
-    // Set bounding minimum input constraints
-    const todayStr = new Date().toISOString().split('T')[0];
-    document.getElementById('visitDate').min = todayStr;
-    document.getElementById('calendarCheckDate').min = todayStr;
+    const visitDateInput = document.getElementById('visitDate');
+    visitDateInput.min = new Date().toISOString().split('T')[0];
 
-    // Interactive Tab Controller Switcher
-    function switchTab(viewId) {
-        document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
-        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-        
-        document.getElementById(viewId).classList.add('active');
-        event.currentTarget.classList.add('active');
-    }
-
-    // Interactive validation warning message rules directly during step input matching
-    function checkSelectedDateSlots() {
-        const targetDate = document.getElementById('visitDate').value;
-        const alertBox = document.getElementById('bookingSlotAlert');
-        if(!targetDate) return;
-
-        alertBox.style.color = "var(--text-muted)";
-        alertBox.innerText = "Checking slot metrics on cloud system server...";
-
-        fetch(`${WEB_APP_URL}?action=getDateSlots&date=${targetDate}`)
-        .then(res => res.json())
-        .then(bookedSlots => {
-            const selectEl = document.getElementById('visitTime');
-            let bookedCount = 0;
-            
-            Array.from(selectEl.options).forEach(opt => {
-                if(!opt.value) return;
-                if(bookedSlots.includes(opt.value)) {
-                    opt.text = `${opt.value} (UNAVAILABLE - BOOKED)`;
-                    opt.disabled = true;
-                    bookedCount++;
-                } else {
-                    opt.text = opt.value;
-                    opt.disabled = false;
-                }
-            });
-            
-            alertBox.style.color = "var(--accent)";
-            alertBox.innerText = `System Status: ${8 - bookedCount} of 8 structural slots open for operational booking.`;
-        });
-    }
-
-    // Global Public Window Module Tracker 
-    function fetchDaySlots(dateVal) {
-        if(!dateVal) return;
-        const container = document.getElementById('slotsGridContainer');
-        document.getElementById('slotStatusTitle').innerText = `Checking Registry Status: ${dateVal}`;
-        container.innerHTML = '<div style="font-size:13px; color:var(--text-muted)">Querying Cloud Node DB...</div>';
-
-        fetch(`${WEB_APP_URL}?action=getDateSlots&date=${dateVal}`)
-        .then(res => res.json())
-        .then(bookedSlots => {
-            const baseTimeSlots = [
-                "08:00 AM - 09:00 AM", "09:00 AM - 10:00 AM", "10:00 AM - 11:00 AM", "11:00 AM - 12:00 PM",
-                "01:00 PM - 02:00 PM", "02:00 PM - 03:00 PM", "03:00 PM - 04:00 PM", "04:00 PM - 05:00 PM"
-            ];
-            container.innerHTML = "";
-            baseTimeSlots.forEach(slot => {
-                const div = document.createElement('div');
-                const isBooked = bookedSlots.includes(slot);
-                div.className = `slot-pill ${isBooked ? 'booked' : 'available'}`;
-                div.innerText = `${slot} \n[${isBooked ? 'RESERVED' : 'OPEN'}]`;
-                container.appendChild(div);
-            });
-        });
-    }
-
-    // Submit Request Interceptor Handler
     document.getElementById('appointmentForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.innerText = "Authorizing Registry Write Ops...";
+        
+        const submitBtn = e.target.querySelector('button');
+        submitBtn.innerText = "Submitting...";
         submitBtn.disabled = true;
 
         const refCode = "TAG-CDRRMO-" + Math.floor(100000 + Math.random() * 900000);
+        
         const formData = {
-            action: "createBooking",
             refCode: refCode,
             fullName: document.getElementById('fullName').value,
             phone: document.getElementById('phone').value,
@@ -353,78 +222,26 @@
 
         fetch(WEB_APP_URL, {
             method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         })
-        .then(res => res.json())
-        .then(response => {
-            if(response.result === "success") {
-                document.getElementById('lblCode').innerText = refCode;
-                document.getElementById('lblName').innerText = formData.fullName;
-                document.getElementById('lblDate').innerText = formData.visitDate;
-                document.getElementById('lblTime').innerText = formData.visitTime;
-                document.getElementById('lblLoc').innerText = formData.location;
-
-                document.getElementById('appointmentForm').style.display = 'none';
-                document.getElementById('successScreen').style.display = 'block';
-            } else {
-                alert("Error processing transaction: " + response.message);
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Submit Secure Request";
-            }
-        })
-        .catch(err => {
-            // Safe fallback configuration handling
-            alert("Record captured and deployed successfully onto production sheet engine framework.");
+        .then(() => {
             document.getElementById('lblCode').innerText = refCode;
+            document.getElementById('lblName').innerText = formData.fullName;
+            document.getElementById('lblDate').innerText = formData.visitDate;
+            document.getElementById('lblTime').innerText = formData.visitTime;
+            document.getElementById('lblLoc').innerText = formData.location;
+
             document.getElementById('appointmentForm').style.display = 'none';
             document.getElementById('successScreen').style.display = 'block';
+        })
+        .catch(err => {
+            alert("Connection error. Could not save application details.");
+            submitBtn.innerText = "Submit Request";
+            submitBtn.disabled = false;
         });
     });
-
-    // Fetch Admin Console Table Records
-    function fetchAdminData() {
-        const tbody = document.getElementById('adminTableBody');
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Syncing Administrative Workspace Data...</td></tr>`;
-
-        fetch(`${WEB_APP_URL}?action=getAllBookings`)
-        .then(res => res.json())
-        .then(data => {
-            tbody.innerHTML = "";
-            if(data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No appointment logs mapped to storage tracking elements.</td></tr>`;
-                return;
-            }
-            data.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-family: monospace; font-weight:600;">${row.refCode}</td>
-                    <td>${row.fullName}</td>
-                    <td>${row.visitDate}<br><small style="color:var(--text-muted)">${row.visitTime}</small></td>
-                    <td>${row.location}</td>
-                    <td><span class="status-badge ${row.status.toLowerCase()}">${row.status}</span></td>
-                    <td>
-                        ${row.status === 'PENDING' ? `<button class="action-btn" onclick="resolveBooking('${row.refCode}')">Mark Done</button>` : `<span style="color:var(--success); font-size:12px; font-weight:500;">✓ Completed</span>`}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        });
-    }
-
-    // Trigger Admin Status Toggle Pipeline
-    function resolveBooking(refCode) {
-        if(!confirm(`Close out entry reference transaction [${refCode}] and switch status state to DONE?`)) return;
-        
-        fetch(WEB_APP_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: "resolveBooking", refCode: refCode })
-        })
-        .then(res => res.json())
-        .then(response => {
-            alert("Database status entry flags modified successfully.");
-            fetchAdminData();
-        });
-    }
 </script>
 </body>
 </html>
