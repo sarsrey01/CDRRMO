@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tagbilaran CDRRMO - Online CCTV Request Appointment</title>
+    <style>
+        :root {
+            --primary: #0a3d62;
+            --secondary: #3c6382;
+            --accent: #e55039;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        
+        .container { max-width: 700px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #eaeff2; padding-bottom: 20px; }
+        .header h1 { color: var(--primary); font-size: 24px; margin-bottom: 5px; }
+        .header p { color: #7f8c8d; font-size: 14px; }
+
+        .section-title { font-size: 16px; font-weight: 600; color: var(--secondary); margin: 25px 0 15px 0; padding-bottom: 5px; border-bottom: 1px solid #eee; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
+        label span { color: var(--accent); }
+        
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="time"], select, textarea {
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(60, 99, 130, 0.15); }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .notice-box { background-color: #fff8f7; border-left: 4px solid var(--accent); padding: 15px; border-radius: 4px; margin-bottom: 25px; font-size: 13px; color: #5d251d; }
+
+        button { background-color: var(--primary); color: white; border: none; padding: 14px 20px; font-size: 16px; font-weight: 600; border-radius: 6px; width: 100%; cursor: pointer; transition: background 0.2s ease; margin-top: 10px; }
+        button:hover { background-color: var(--secondary); }
+
+        .success-card { display: none; text-align: center; padding: 40px 20px; }
+        .success-card h2 { color: #2ecc71; margin-bottom: 15px; }
+        .receipt-box { background: #f1f2f6; padding: 20px; border-radius: 8px; text-align: left; margin: 20px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Appointment Form -->
+    <form id="appointmentForm">
+        <div class="header">
+            <h1>Tagbilaran CDRRMO</h1>
+            <p>Online CCTV Review Appointment Portal</p>
+        </div>
+
+        <div class="notice-box">
+            <strong>Important Requirement:</strong> Please ensure you bring a copy of the <strong>Police Blotter/Report</strong> and a <strong>Formal Request Letter</strong> addressed to the CDRRMO Head on your scheduled date.
+        </div>
+
+        <div class="section-title">1. Citizen Contact Information</div>
+        <div class="form-group">
+            <label for="fullName">Full Name <span>*</span></label>
+            <input type="text" id="fullName" required placeholder="Juan Dela Cruz">
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="phone">Mobile Number <span>*</span></label>
+                <input type="tel" id="phone" required placeholder="0917XXXXXXX">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="juan@example.com">
+            </div>
+        </div>
+
+        <div class="section-title">2. Incident & CCTV Details</div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="incidentDate">Date of Incident <span>*</span></label>
+                <input type="date" id="incidentDate" required>
+            </div>
+            <div class="form-group">
+                <label for="incidentTime">Approximate Time <span>*</span></label>
+                <input type="time" id="incidentTime" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="location">Exact Location / Intersection in Tagbilaran <span>*</span></label>
+            <input type="text" id="location" required placeholder="e.g., CPG Avenue corner Lesage St. (Near City Hall)">
+        </div>
+        <div class="form-group">
+            <label for="purpose">Purpose of Request / Brief Description <span>*</span></label>
+            <textarea id="purpose" rows="3" required placeholder="e.g., Traffic accident involving a red sedan and tricycle #1234"></textarea>
+        </div>
+
+        <div class="section-title">3. Schedule Your Office Visit</div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="visitDate">Preferred Appointment Date <span>*</span></label>
+                <input type="date" id="visitDate" required>
+            </div>
+            <div class="form-group">
+                <label for="visitTime">Preferred Time Slot <span>*</span></label>
+                <select id="visitTime" required>
+                    <option value="">-- Select Time Slot --</option>
+                    <option value="09:00 AM">09:00 AM - 10:00 AM</option>
+                    <option value="10:00 AM">10:00 AM - 11:00 AM</option>
+                    <option value="01:30 PM">01:30 PM - 02:30 PM</option>
+                    <option value="02:30 PM">02:30 PM - 03:30 PM</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit">Confirm & Book Appointment</button>
+    </form>
+
+    <!-- Success Output Screen -->
+    <div id="successScreen" class="success-card">
+        <h2>🎉 Appointment Confirmed!</h2>
+        <p>Your request has been logged. Please take a screenshot of this confirmation ticket.</p>
+        <div class="receipt-box" id="receiptContent"></div>
+        <button onclick="window.print()" style="background-color: var(--secondary); max-width: 200px;">Print Ticket</button>
+    </div>
+</div>
+
+<script>
+    // Paste your Google Web App URL here
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzrrCLj5DtcGSWy_EIK-zhY4blOnDDuV-VamH5z58oJkaHPFL61M9j2Gw-QfLVjoLQy/exec";
+
+    // Restrict office visit dates to today onwards
+    const visitDateInput = document.getElementById('visitDate');
+    visitDateInput.min = new Date().toISOString().split('T')[0];
+
+    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show loading state on button
+        const submitBtn = e.target.querySelector('button');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = "Processing Please Wait...";
+        submitBtn.disabled = true;
+
+        // Generate Reference Code
+        const refCode = "TAG-CDRRMO-" + Math.floor(100000 + Math.random() * 900000);
+        
+        // Package the form data into a neat object
+        const formData = {
+            refCode: refCode,
+            fullName: document.getElementById('fullName').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            incidentDate: document.getElementById('incidentDate').value,
+            incidentTime: document.getElementById('incidentTime').value,
+            location: document.getElementById('location').value,
+            purpose: document.getElementById('purpose').value,
+            visitDate: document.getElementById('visitDate').value,
+            visitTime: document.getElementById('visitTime').value
+        };
+
+        // Send data to Google Sheets backend via POST request
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Bypasses CORS issues safely for simple Google apps script triggers
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(() => {
+            // Render the screen ticket upon successful submission
+            document.getElementById('receiptContent').innerHTML = `
+                <strong>REF CODE:</strong> ${refCode}<br>
+                <strong>Citizen:</strong> ${formData.fullName}<br>
+                <strong>Appt Date:</strong> ${formData.visitDate}<br>
+                <strong>Time Slot:</strong> ${formData.visitTime}<br>
+                <strong>Location to Review:</strong> ${formData.location}<br><br>
+                <em>Present this ticket along with your Police Report at the CDRRMO Command Center.</em>
+            `;
+            document.getElementById('appointmentForm').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'block';
+        })
+        .catch(err => {
+            alert("Something went wrong saving your appointment. Please check your internet connection.");
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+        });
+    });
+</script>
