@@ -121,11 +121,17 @@
             <div class="form-group">
                 <label for="visitTime">Available Time Slot <span>*</span></label>
                 <select id="visitTime" required>
-                    <option value="">Select a time slot</option>
+                    <option value="">Select an office time slot</option>
+                    <!-- Morning Block -->
+                    <option value="08:00 AM - 09:00 AM">08:00 AM - 09:00 AM</option>
                     <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
                     <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
-                    <option value="01:30 PM - 02:30 PM">01:30 PM - 02:30 PM</option>
-                    <option value="02:30 PM - 03:30 PM">02:30 PM - 03:30 PM</option>
+                    <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                    <!-- Afternoon Block -->
+                    <option value="01:00 PM - 02:00 PM">01:00 PM - 02:00 PM</option>
+                    <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
+                    <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+                    <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
                 </select>
             </div>
         </div>
@@ -168,10 +174,8 @@
 </div>
 
 <script>
-    // Replace with your deployment web app string generated from Google Sheets script editor
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzrrCLj5DtcGSWy_EIK-zhY4blOnDDuV-VamH5z58oJkaHPFL61M9j2Gw-QfLVjoLQy/exec";
 
-    // Set minimal selectable visit date to today
     const visitDateInput = document.getElementById('visitDate');
     visitDateInput.min = new Date().toISOString().split('T')[0];
 
@@ -204,7 +208,6 @@
             body: JSON.stringify(formData)
         })
         .then(() => {
-            // Map plain values directly into clean UI elements
             document.getElementById('lblCode').innerText = refCode;
             document.getElementById('lblName').innerText = formData.fullName;
             document.getElementById('lblDate').innerText = formData.visitDate;
